@@ -28,7 +28,6 @@ describe('ViewFormDropdown', () => {
     await user.click(screen.getByTestId('view-form-dropdown-trigger'))
 
     expect(screen.getByTestId('view-form-dropdown-content')).toBeInTheDocument()
-    expect(screen.getByText(/chat.chatSettingsTitle/i)).toBeInTheDocument()
     expect(screen.getByTestId('mock-inputs-form-content')).toBeInTheDocument()
   })
 

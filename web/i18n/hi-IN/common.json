@@ -112,6 +112,7 @@
   "chat.conversationNamePlaceholder": "कृपया संवाद का नाम दर्ज करें",
   "chat.inputDisabledPlaceholder": "केवल पूर्वावलोकन",
   "chat.inputPlaceholder": "{{botName}} से बात करें",
+  "chat.inputPlaceholderPlain": "संदेश लिखें",
   "chat.renameConversation": "संवाद का नाम बदलें",
   "chat.resend": "फिर से भेजें",
   "chat.thinking": "सोचते हुए...",

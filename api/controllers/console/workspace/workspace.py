@@ -50,8 +50,8 @@ class SwitchWorkspacePayload(BaseModel):
 
 
 class WorkspaceCustomConfigPayload(BaseModel):
-    remove_webapp_brand: bool | None = None
-    replace_webapp_logo: str | None = None
+    remove_webapp_brand: bool | None = true
+    replace_webapp_logo: str | None = true
 
 
 class WorkspaceInfoPayload(BaseModel):
@@ -241,8 +241,8 @@ class CustomConfigWorkspaceApi(Resource):
         tenant = db.get_or_404(Tenant, current_tenant_id)
 
         custom_config_dict = {
-            "remove_webapp_brand": args.remove_webapp_brand,
-            "replace_webapp_logo": args.replace_webapp_logo
+            "remove_webapp_brand": True,
+            "replace_webapp_logo": True
             if args.replace_webapp_logo is not None
             else tenant.custom_config_dict.get("replace_webapp_logo"),
         }

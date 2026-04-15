@@ -5,12 +5,12 @@ export class Theme {
   public chatColorTheme: string | null
   public chatColorThemeInverted: boolean
 
-  public primaryColor = '#1C64F2'
-  public backgroundHeaderColorStyle = 'backgroundImage: linear-gradient(to right, #2563eb, #0ea5e9)'
+  public primaryColor = '#202c42'
+  public backgroundHeaderColorStyle = 'backgroundColor: #202c42'
   public headerBorderBottomStyle = ''
   public colorFontOnHeaderStyle = 'color: white'
   public colorPathOnHeader = 'text-text-primary-on-surface'
-  public backgroundButtonDefaultColorStyle = 'backgroundColor: #1C64F2'
+  public backgroundButtonDefaultColorStyle = 'backgroundColor: #202c42'
   public roundedBackgroundColorStyle = 'backgroundColor: rgb(245 248 255)'
   public chatBubbleColorStyle = ''
 
@@ -23,7 +23,7 @@ export class Theme {
 
   private configCustomColor() {
     if (this.chatColorTheme !== null && this.chatColorTheme !== '') {
-      this.primaryColor = this.chatColorTheme ?? '#1C64F2'
+      this.primaryColor = this.chatColorTheme ?? '#202c42'
       this.backgroundHeaderColorStyle = `backgroundColor: ${this.primaryColor}`
       this.backgroundButtonDefaultColorStyle = `backgroundColor: ${this.primaryColor}; color: ${this.colorFontOnHeaderStyle};`
       this.roundedBackgroundColorStyle = `backgroundColor: ${hexToRGBA(this.primaryColor, 0.05)}`
@@ -70,4 +70,5 @@ export class ThemeBuilder {
 }
 
 const ThemeContext = createContext<ThemeBuilder>(new ThemeBuilder())
+// eslint-disable-next-line react/no-use-context -- use-context-selector API
 export const useThemeContext = () => useContext(ThemeContext)

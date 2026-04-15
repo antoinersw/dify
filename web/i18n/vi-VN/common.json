@@ -112,6 +112,7 @@
   "chat.conversationNamePlaceholder": "Vui lòng nhập tên cuộc trò chuyện",
   "chat.inputDisabledPlaceholder": "Chỉ Xem Trước",
   "chat.inputPlaceholder": "Nói chuyện với {{botName}}",
+  "chat.inputPlaceholderPlain": "Nhập tin nhắn",
   "chat.renameConversation": "Đổi tên Cuộc trò chuyện",
   "chat.resend": "Gửi lại",
   "chat.thinking": "Suy nghĩ...",

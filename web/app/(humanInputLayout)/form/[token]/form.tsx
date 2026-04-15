@@ -3,11 +3,6 @@ import type { ButtonProps } from '@/app/components/base/button'
 import type { FormInputItem, UserAction } from '@/app/components/workflow/nodes/human-input/types'
 import type { SiteInfo } from '@/models/share'
 import type { HumanInputFormError } from '@/service/use-share'
-import {
-  RiCheckboxCircleFill,
-  RiErrorWarningFill,
-  RiInformation2Fill,
-} from '@remixicon/react'
 import { produce } from 'immer'
 import * as React from 'react'
 import { useEffect, useMemo, useState } from 'react'
@@ -18,7 +13,6 @@ import ContentItem from '@/app/components/base/chat/chat/answer/human-input-cont
 import ExpirationTime from '@/app/components/base/chat/chat/answer/human-input-content/expiration-time'
 import { getButtonStyle } from '@/app/components/base/chat/chat/answer/human-input-content/utils'
 import Loading from '@/app/components/base/loading'
-import DifyLogo from '@/app/components/base/logo/dify-logo'
 import useDocumentTitle from '@/hooks/use-document-title'
 import { useParams } from '@/next/navigation'
 import { useGetHumanInputForm, useSubmitHumanInputForm } from '@/service/use-share'
@@ -59,7 +53,11 @@ const FormContent = () => {
   const contentList = useMemo(() => {
     if (!formData?.form_content)
       return []
-    return splitByOutputVar(formData.form_content)
+    let seq = 0
+    return splitByOutputVar(formData.form_content).map((content) => {
+      seq += 1
+      return { id: `form-content-part-${seq}`, content }
+    })
   }, [formData?.form_content])
 
   useEffect(() => {
@@ -101,9 +99,9 @@ const FormContent = () => {
     return (
       <div className={cn('flex h-full w-full flex-col items-center justify-center')}>
         <div className="min-w-[480px] max-w-[640px]">
-          <div className="border-components-divider-subtle flex h-[320px] flex-col gap-4 rounded-[20px] border bg-chat-bubble-bg p-10 pb-9 shadow-lg backdrop-blur-sm">
+          <div className="flex h-[320px] flex-col gap-4 rounded-[20px] border border-divider-subtle bg-chat-bubble-bg p-10 pb-9 shadow-lg backdrop-blur-sm">
             <div className="h-[56px] w-[56px] shrink-0 rounded-2xl border border-components-panel-border-subtle bg-background-default-dodge p-3">
-              <RiCheckboxCircleFill className="h-8 w-8 text-text-success" />
+              <div className="i-ri-checkbox-circle-fill h-8 w-8 text-text-success" />
             </div>
             <div className="grow">
               <div className="title-4xl-semi-bold text-text-primary">{t('humanInput.thanks', { ns: 'share' })}</div>
@@ -112,13 +110,13 @@ const FormContent = () => {
             <div className="system-2xs-regular-uppercase shrink-0 text-text-tertiary">{t('humanInput.submissionID', { id: token, ns: 'share' })}</div>
           </div>
           <div className="flex flex-row-reverse px-2 py-3">
-            <div className={cn(
+            {/* <div className={cn(
               'flex shrink-0 items-center gap-1.5 px-1',
             )}
             >
               <div className="system-2xs-medium-uppercase text-text-tertiary">{t('chat.poweredBy', { ns: 'share' })}</div>
               <DifyLogo size="small" />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -129,9 +127,9 @@ const FormContent = () => {
     return (
       <div className={cn('flex h-full w-full flex-col items-center justify-center')}>
         <div className="min-w-[480px] max-w-[640px]">
-          <div className="border-components-divider-subtle flex h-[320px] flex-col gap-4 rounded-[20px] border bg-chat-bubble-bg p-10 pb-9 shadow-lg backdrop-blur-sm">
+          <div className="flex h-[320px] flex-col gap-4 rounded-[20px] border border-divider-subtle bg-chat-bubble-bg p-10 pb-9 shadow-lg backdrop-blur-sm">
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-components-panel-border-subtle bg-background-default-dodge p-3">
-              <RiInformation2Fill className="h-8 w-8 text-text-accent" />
+              <div className="i-ri-information-2-fill h-8 w-8 text-text-accent" />
             </div>
             <div className="grow">
               <div className="title-4xl-semi-bold text-text-primary">{t('humanInput.sorry', { ns: 'share' })}</div>
@@ -140,13 +138,13 @@ const FormContent = () => {
             <div className="system-2xs-regular-uppercase shrink-0 text-text-tertiary">{t('humanInput.submissionID', { id: token, ns: 'share' })}</div>
           </div>
           <div className="flex flex-row-reverse px-2 py-3">
-            <div className={cn(
+            {/* <div className={cn(
               'flex shrink-0 items-center gap-1.5 px-1',
             )}
             >
               <div className="system-2xs-medium-uppercase text-text-tertiary">{t('chat.poweredBy', { ns: 'share' })}</div>
               <DifyLogo size="small" />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -157,9 +155,9 @@ const FormContent = () => {
     return (
       <div className={cn('flex h-full w-full flex-col items-center justify-center')}>
         <div className="min-w-[480px] max-w-[640px]">
-          <div className="border-components-divider-subtle flex h-[320px] flex-col gap-4 rounded-[20px] border bg-chat-bubble-bg p-10 pb-9 shadow-lg backdrop-blur-sm">
+          <div className="flex h-[320px] flex-col gap-4 rounded-[20px] border border-divider-subtle bg-chat-bubble-bg p-10 pb-9 shadow-lg backdrop-blur-sm">
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-components-panel-border-subtle bg-background-default-dodge p-3">
-              <RiInformation2Fill className="h-8 w-8 text-text-accent" />
+              <div className="i-ri-information-2-fill h-8 w-8 text-text-accent" />
             </div>
             <div className="grow">
               <div className="title-4xl-semi-bold text-text-primary">{t('humanInput.sorry', { ns: 'share' })}</div>
@@ -168,13 +166,13 @@ const FormContent = () => {
             <div className="system-2xs-regular-uppercase shrink-0 text-text-tertiary">{t('humanInput.submissionID', { id: token, ns: 'share' })}</div>
           </div>
           <div className="flex flex-row-reverse px-2 py-3">
-            <div className={cn(
+            {/* <div className={cn(
               'flex shrink-0 items-center gap-1.5 px-1',
             )}
             >
               <div className="system-2xs-medium-uppercase text-text-tertiary">{t('chat.poweredBy', { ns: 'share' })}</div>
               <DifyLogo size="small" />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -185,22 +183,22 @@ const FormContent = () => {
     return (
       <div className={cn('flex h-full w-full flex-col items-center justify-center')}>
         <div className="min-w-[480px] max-w-[640px]">
-          <div className="border-components-divider-subtle flex h-[320px] flex-col gap-4 rounded-[20px] border bg-chat-bubble-bg p-10 pb-9 shadow-lg backdrop-blur-sm">
+          <div className="flex h-[320px] flex-col gap-4 rounded-[20px] border border-divider-subtle bg-chat-bubble-bg p-10 pb-9 shadow-lg backdrop-blur-sm">
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-components-panel-border-subtle bg-background-default-dodge p-3">
-              <RiErrorWarningFill className="h-8 w-8 text-text-destructive" />
+              <div className="i-ri-error-warning-fill h-8 w-8 text-text-destructive" />
             </div>
             <div className="grow">
               <div className="title-4xl-semi-bold text-text-primary">{t('humanInput.rateLimitExceeded', { ns: 'share' })}</div>
             </div>
           </div>
           <div className="flex flex-row-reverse px-2 py-3">
-            <div className={cn(
+            {/* <div className={cn(
               'flex shrink-0 items-center gap-1.5 px-1',
             )}
             >
               <div className="system-2xs-medium-uppercase text-text-tertiary">{t('chat.poweredBy', { ns: 'share' })}</div>
               <DifyLogo size="small" />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -211,22 +209,22 @@ const FormContent = () => {
     return (
       <div className={cn('flex h-full w-full flex-col items-center justify-center')}>
         <div className="min-w-[480px] max-w-[640px]">
-          <div className="border-components-divider-subtle flex h-[320px] flex-col gap-4 rounded-[20px] border bg-chat-bubble-bg p-10 pb-9 shadow-lg backdrop-blur-sm">
+          <div className="flex h-[320px] flex-col gap-4 rounded-[20px] border border-divider-subtle bg-chat-bubble-bg p-10 pb-9 shadow-lg backdrop-blur-sm">
             <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-components-panel-border-subtle bg-background-default-dodge p-3">
-              <RiErrorWarningFill className="h-8 w-8 text-text-destructive" />
+              <div className="i-ri-error-warning-fill h-8 w-8 text-text-destructive" />
             </div>
             <div className="grow">
               <div className="title-4xl-semi-bold text-text-primary">{t('humanInput.formNotFound', { ns: 'share' })}</div>
             </div>
           </div>
           <div className="flex flex-row-reverse px-2 py-3">
-            <div className={cn(
+            {/* <div className={cn(
               'flex shrink-0 items-center gap-1.5 px-1',
             )}
             >
               <div className="system-2xs-medium-uppercase text-text-tertiary">{t('chat.poweredBy', { ns: 'share' })}</div>
               <DifyLogo size="small" />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -248,10 +246,10 @@ const FormContent = () => {
         <div className="system-xl-semibold grow text-text-primary">{site.title}</div>
       </div>
       <div className="h-0 w-full grow overflow-y-auto">
-        <div className="border-components-divider-subtle rounded-[20px] border bg-chat-bubble-bg p-4 shadow-lg backdrop-blur-sm">
-          {contentList.map((content, index) => (
+        <div className="rounded-[20px] border border-divider-subtle bg-chat-bubble-bg p-4 shadow-lg backdrop-blur-sm">
+          {contentList.map(({ id, content }) => (
             <ContentItem
-              key={index}
+              key={id}
               content={content}
               formInputFields={formData.inputs}
               inputs={inputs}
@@ -272,7 +270,7 @@ const FormContent = () => {
           </div>
           <ExpirationTime expirationTime={formData.expiration_time * 1000} />
         </div>
-        <div className="flex flex-row-reverse px-2 py-3">
+        {/* <div className="flex flex-row-reverse px-2 py-3">
           <div className={cn(
             'flex shrink-0 items-center gap-1.5 px-1',
           )}
@@ -280,7 +278,7 @@ const FormContent = () => {
             <div className="system-2xs-medium-uppercase text-text-tertiary">{t('chat.poweredBy', { ns: 'share' })}</div>
             <DifyLogo size="small" />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

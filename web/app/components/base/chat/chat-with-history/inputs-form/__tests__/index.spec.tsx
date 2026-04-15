@@ -85,8 +85,6 @@ describe('InputsFormNode', () => {
     setMockContext({ currentConversationId: '' })
     render(<InputsFormNode collapsed={true} setCollapsed={setCollapsed} />)
 
-    expect(screen.getByText('share.chat.chatSettingsTitle')).toBeInTheDocument()
-
     const editBtn = screen.getByRole('button', { name: /common.operation.edit/i })
     await user.click(editBtn)
     expect(setCollapsed).toHaveBeenCalledWith(false)

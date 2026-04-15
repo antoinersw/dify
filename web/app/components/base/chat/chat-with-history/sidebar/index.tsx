@@ -1,10 +1,5 @@
 import type { ConversationItem } from '@/models/share'
 import {
-  RiEditBoxLine,
-  RiExpandRightLine,
-  RiLayoutLeft2Line,
-} from '@remixicon/react'
-import {
   useCallback,
   useState,
 } from 'react'
@@ -15,9 +10,7 @@ import Button from '@/app/components/base/button'
 import List from '@/app/components/base/chat/chat-with-history/sidebar/list'
 import RenameModal from '@/app/components/base/chat/chat-with-history/sidebar/rename-modal'
 import Confirm from '@/app/components/base/confirm'
-import DifyLogo from '@/app/components/base/logo/dify-logo'
 import MenuDropdown from '@/app/components/share/text-generation/menu-dropdown'
-import { useGlobalPublicStore } from '@/context/global-public-context'
 import { cn } from '@/utils/classnames'
 import { useChatWithHistoryContext } from '../context'
 
@@ -47,7 +40,6 @@ const Sidebar = ({ isPanel, panelVisible }: Props) => {
     isResponding,
   } = useChatWithHistoryContext()
   const isSidebarCollapsed = sidebarCollapseState
-  const systemFeatures = useGlobalPublicStore(s => s.systemFeatures)
   const [showConfirm, setShowConfirm] = useState<ConversationItem | null>(null)
   const [showRename, setShowRename] = useState<ConversationItem | null>(null)
 
@@ -100,21 +92,21 @@ const Sidebar = ({ isPanel, panelVisible }: Props) => {
             imageUrl={appData?.site.icon_url}
           />
         </div>
-        <div className={cn('system-md-semibold grow truncate text-text-secondary')}>{appData?.site.title}</div>
+        <div className="min-w-0 grow" aria-hidden />
         {!isMobile && isSidebarCollapsed && (
           <ActionButton size="l" onClick={() => handleSidebarCollapse(false)}>
-            <RiExpandRightLine className="h-[18px] w-[18px]" />
+            <div className="i-ri-expand-right-line h-[18px] w-[18px]" />
           </ActionButton>
         )}
         {!isMobile && !isSidebarCollapsed && (
           <ActionButton size="l" onClick={() => handleSidebarCollapse(true)}>
-            <RiLayoutLeft2Line className="h-[18px] w-[18px]" />
+            <div className="i-ri-layout-left-2-line h-[18px] w-[18px]" />
           </ActionButton>
         )}
       </div>
       <div className="shrink-0 px-3 py-4">
         <Button variant="secondary-accent" disabled={isResponding} className="w-full justify-center" onClick={handleNewConversation}>
-          <RiEditBoxLine className="mr-1 h-4 w-4" />
+          <div className="i-ri-edit-box-line mr-1 h-4 w-4" />
           {t('chat.newChat', { ns: 'share' })}
         </Button>
       </div>
@@ -150,7 +142,7 @@ const Sidebar = ({ isPanel, panelVisible }: Props) => {
           forceClose={isPanel && !panelVisible}
         />
         {/* powered by */}
-        <div className="shrink-0">
+        {/* <div className="shrink-0">
           {!appData?.custom_config?.remove_webapp_brand && (
             <div className={cn(
               'flex shrink-0 items-center gap-1.5 px-1',
@@ -166,7 +158,7 @@ const Sidebar = ({ isPanel, panelVisible }: Props) => {
               }
             </div>
           )}
-        </div>
+        </div> */}
         {!!showConfirm && (
           <Confirm
             title={t('chat.deleteConversation.title', { ns: 'share' })}

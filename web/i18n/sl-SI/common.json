@@ -112,6 +112,7 @@
   "chat.conversationNamePlaceholder": "Prosimo, vnesite ime pogovora",
   "chat.inputDisabledPlaceholder": "Samo Predogled",
   "chat.inputPlaceholder": "Pogovorite se z {{botName}}",
+  "chat.inputPlaceholderPlain": "Vnesite sporočilo",
   "chat.renameConversation": "Preimenovanje pogovora",
   "chat.resend": "Ponovno pošlji",
   "chat.thinking": "Razmišljanje...",

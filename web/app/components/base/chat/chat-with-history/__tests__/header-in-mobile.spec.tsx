@@ -42,18 +42,19 @@ vi.mock('../../embedded-chatbot/theme/theme-context', () => ({
 // Mock PortalToFollowElem using React Context
 vi.mock('@/app/components/base/portal-to-follow-elem', async () => {
   const React = await import('react')
+  const { use } = React
   const MockContext = React.createContext(false)
 
   return {
     PortalToFollowElem: ({ children, open }: { children: React.ReactNode, open: boolean }) => {
       return (
-        <MockContext.Provider value={open}>
+        <MockContext value={open}>
           <div data-open={open}>{children}</div>
-        </MockContext.Provider>
+        </MockContext>
       )
     },
     PortalToFollowElemContent: ({ children }: { children: React.ReactNode }) => {
-      const open = React.useContext(MockContext)
+      const open = use(MockContext)
       if (!open)
         return null
       return <div>{children}</div>
@@ -141,9 +142,9 @@ describe('HeaderInMobile', () => {
     vi.mocked(useChatWithHistoryContext).mockReturnValue(defaultContextValue)
   })
 
-  it('should render title when no conversation', () => {
+  it('should not render app title when no conversation', () => {
     render(<HeaderInMobile />)
-    expect(screen.getByText('Test Chat')).toBeInTheDocument()
+    expect(screen.queryByText('Test Chat')).not.toBeInTheDocument()
   })
 
   it('should render conversation name when active', async () => {
@@ -235,9 +236,10 @@ describe('HeaderInMobile', () => {
 
     expect(screen.getByTestId('mobile-chat-settings-overlay')).toBeInTheDocument()
 
-    // Click inside the settings panel (find the title)
-    const settingsTitle = screen.getByText(/share\.chat\.chatSettingsTitle/i)
-    fireEvent.click(settingsTitle)
+    // Click inside the settings panel (inner surface stops propagation)
+    const overlay = screen.getByTestId('mobile-chat-settings-overlay')
+    const innerPanel = overlay.firstElementChild as HTMLElement
+    fireEvent.click(innerPanel)
 
     // Settings should still be visible
     expect(screen.getByTestId('mobile-chat-settings-overlay')).toBeInTheDocument()
@@ -500,7 +502,7 @@ describe('HeaderInMobile', () => {
     expect(true).toBe(true)
   })
 
-  it('should render app icon and title correctly', () => {
+  it('should not show app title in mobile header when no conversation', () => {
     const appDataWithIcon: AppData = {
       app_id: 'test-app',
       custom_config: null,
@@ -519,7 +521,7 @@ describe('HeaderInMobile', () => {
     })
 
     render(<HeaderInMobile />)
-    expect(screen.getByText('My App')).toBeInTheDocument()
+    expect(screen.queryByText('My App')).not.toBeInTheDocument()
   })
 
   it('should properly show and hide modals conditionally', async () => {
@@ -586,6 +588,7 @@ describe('HeaderInMobile', () => {
 
     const { container } = render(<HeaderInMobile />)
     const operationTrigger = container.querySelector('.system-md-semibold')?.parentElement as HTMLElement
+    expect(operationTrigger).toBeTruthy()
     fireEvent.click(operationTrigger)
     fireEvent.click(await screen.findByText(/explore\.sidebar\.action\.rename|sidebar\.action\.rename/i))
 

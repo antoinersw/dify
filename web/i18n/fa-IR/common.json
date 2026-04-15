@@ -112,6 +112,7 @@
   "chat.conversationNamePlaceholder": "لطفاً نام مکالمه را وارد کنید",
   "chat.inputDisabledPlaceholder": "فقط پیش‌نمایش",
   "chat.inputPlaceholder": "با {{botName}} صحبت کنید",
+  "chat.inputPlaceholderPlain": "پیام بنویسید",
   "chat.renameConversation": "تغییر نام مکالمه",
   "chat.resend": "دوباره ارسال کنید",
   "chat.thinking": "تفکر...",

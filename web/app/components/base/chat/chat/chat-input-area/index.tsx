@@ -10,6 +10,7 @@ import { decode } from 'html-entities'
 import Recorder from 'js-audio-recorder'
 import {
   useCallback,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -72,6 +73,14 @@ const ChatInputArea = ({
 }: ChatInputAreaProps) => {
   const { t } = useTranslation()
   const { notify } = useToastContext()
+  const inputPlaceholder = useMemo(() => {
+    if (readonly)
+      return decode(t('chat.inputDisabledPlaceholder', { ns: 'common' }) || '')
+    const name = botName?.trim()
+    if (name)
+      return decode(t('chat.inputPlaceholder', { ns: 'common', botName: name }) || '')
+    return decode(t('chat.inputPlaceholderPlain', { ns: 'common' }) || '')
+  }, [readonly, botName, t])
   const {
     wrapperRef,
     textareaRef,
@@ -224,7 +233,7 @@ const ChatInputArea = ({
                 className={cn(
                   'w-full resize-none bg-transparent p-1 leading-6 text-text-primary outline-none body-lg-regular',
                 )}
-                placeholder={decode(t(readonly ? 'chat.inputDisabledPlaceholder' : 'chat.inputPlaceholder', { ns: 'common', botName }) || '')}
+                placeholder={inputPlaceholder}
                 autoFocus
                 minRows={1}
                 value={query}

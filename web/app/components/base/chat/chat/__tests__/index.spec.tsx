@@ -820,7 +820,7 @@ describe('Chat', () => {
       expect(screen.getByTestId('chat-input-area')).toBeInTheDocument()
     })
 
-    it('should pass appData.site.title as botName to ChatInputArea', () => {
+    it('should render ChatInputArea without bot name in placeholder', () => {
       renderChat({
         appData: { site: { title: 'MyBot' } } as unknown as ChatProps['appData'],
         noChatInput: false,
@@ -828,7 +828,7 @@ describe('Chat', () => {
       expect(screen.getByTestId('chat-input-area')).toBeInTheDocument()
     })
 
-    it('should pass Bot as default botName when appData.site.title is missing', () => {
+    it('should render ChatInputArea when app site title is missing', () => {
       renderChat({
         appData: {} as unknown as ChatProps['appData'],
         noChatInput: false,

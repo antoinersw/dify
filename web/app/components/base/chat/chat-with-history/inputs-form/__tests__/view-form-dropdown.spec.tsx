@@ -63,21 +63,17 @@ describe('ViewFormDropdown', () => {
     const user = userEvent.setup()
     render(<ViewFormDropdown />)
 
-    // Initially, settings icon should be hidden (portal content)
-    expect(screen.queryByText('share.chat.chatSettingsTitle')).not.toBeInTheDocument()
-
     // Find trigger (ActionButton renders a button)
     const trigger = screen.getByRole('button')
     expect(trigger).toBeInTheDocument()
 
     // Open dropdown
     await user.click(trigger)
-    expect(screen.getByText('share.chat.chatSettingsTitle')).toBeInTheDocument()
     expect(screen.getByText('Test Label')).toBeInTheDocument()
 
     // Close dropdown
     await user.click(trigger)
-    expect(screen.queryByText('share.chat.chatSettingsTitle')).not.toBeInTheDocument()
+    expect(screen.queryByText('Test Label')).not.toBeInTheDocument()
   })
 
   it('renders correctly with multiple form items', async () => {

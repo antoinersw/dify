@@ -112,6 +112,7 @@
   "chat.conversationNamePlaceholder": "Пожалуйста, введите название разговора",
   "chat.inputDisabledPlaceholder": "Только предпросмотр",
   "chat.inputPlaceholder": "Поговорить с {{botName}}",
+  "chat.inputPlaceholderPlain": "Введите сообщение",
   "chat.renameConversation": "Переименовать разговор",
   "chat.resend": "Переслать",
   "chat.thinking": "Мыслящий...",

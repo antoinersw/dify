@@ -2,7 +2,6 @@ import type { ConversationItem } from '@/models/share'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ActionButton from '@/app/components/base/action-button'
-import AppIcon from '@/app/components/base/app-icon'
 import InputsFormContent from '@/app/components/base/chat/chat-with-history/inputs-form/content'
 import RenameModal from '@/app/components/base/chat/chat-with-history/sidebar/rename-modal'
 import Confirm from '@/app/components/base/confirm'
@@ -13,7 +12,6 @@ import Sidebar from './sidebar'
 
 const HeaderInMobile = () => {
   const {
-    appData,
     currentConversationId,
     currentConversationItem,
     pinnedConversationList,
@@ -68,21 +66,7 @@ const HeaderInMobile = () => {
           <div className="i-ri-menu-line h-[18px] w-[18px]" />
         </ActionButton>
         <div className="flex grow items-center justify-center">
-          {!currentConversationId && (
-            <>
-              <AppIcon
-                className="mr-2"
-                size="tiny"
-                icon={appData?.site.icon}
-                iconType={appData?.site.icon_type}
-                imageUrl={appData?.site.icon_url}
-                background={appData?.site.icon_background}
-              />
-              <div className="truncate text-text-secondary system-md-semibold">
-                {appData?.site.title}
-              </div>
-            </>
-          )}
+
           {currentConversationId && (
             <Operation
               title={currentConversationItem?.name || ''}
@@ -118,14 +102,8 @@ const HeaderInMobile = () => {
           onClick={() => setShowChatSettings(false)}
           data-testid="mobile-chat-settings-overlay"
         >
-          <div className="flex h-full w-[calc(100vw_-_40px)] flex-col rounded-xl bg-components-panel-bg shadow-lg backdrop-blur-sm" onClick={e => e.stopPropagation()}>
-            <div className="flex items-center gap-3 rounded-t-2xl border-b border-divider-subtle px-4 py-3">
-              <div className="i-custom-public-other-message-3-fill h-6 w-6 shrink-0" />
-              <div className="grow text-text-secondary system-xl-semibold">{t('chat.chatSettingsTitle', { ns: 'share' })}</div>
-            </div>
-            <div className="p-4">
-              <InputsFormContent />
-            </div>
+          <div className="flex h-full w-[calc(100vw_-_40px)] flex-col overflow-y-auto rounded-xl bg-components-panel-bg p-4 shadow-lg backdrop-blur-sm" onClick={e => e.stopPropagation()}>
+            <InputsFormContent />
           </div>
         </div>
       )}

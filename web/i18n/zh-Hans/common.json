@@ -112,6 +112,7 @@
   "chat.conversationNamePlaceholder": "请输入会话名称",
   "chat.inputDisabledPlaceholder": "仅供试用",
   "chat.inputPlaceholder": "和 {{botName}} 聊天",
+  "chat.inputPlaceholderPlain": "输入消息",
   "chat.renameConversation": "重命名会话",
   "chat.resend": "重新发送",
   "chat.thinking": "深度思考中...",

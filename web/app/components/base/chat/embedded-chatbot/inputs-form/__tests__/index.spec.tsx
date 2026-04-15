@@ -54,14 +54,12 @@ describe('InputsFormNode', () => {
 
   it('should render expanded state correctly', () => {
     render(<InputsFormNode collapsed={false} setCollapsed={setCollapsed} />)
-    expect(screen.getByText(/chat.chatSettingsTitle/i)).toBeInTheDocument()
     expect(screen.getByTestId('mock-inputs-form-content')).toBeInTheDocument()
     expect(screen.getByTestId('inputs-form-start-chat-button')).toBeInTheDocument()
   })
 
   it('should render collapsed state correctly', () => {
     render(<InputsFormNode collapsed={true} setCollapsed={setCollapsed} />)
-    expect(screen.getByText(/chat.chatSettingsTitle/i)).toBeInTheDocument()
     expect(screen.queryByTestId('mock-inputs-form-content')).not.toBeInTheDocument()
     expect(screen.getByTestId('inputs-form-edit-button')).toBeInTheDocument()
   })
@@ -130,18 +128,16 @@ describe('InputsFormNode', () => {
     const mainDiv = screen.getByTestId('inputs-form-node')
     expect(mainDiv).toHaveClass('mb-4 pt-4')
 
-    // Header container (parent of the icon)
-    const header = screen.getByText(/chat.chatSettingsTitle/i).parentElement
-    expect(header).toHaveClass('px-4 py-3')
+    expect(screen.queryByTestId('inputs-form-toolbar')).not.toBeInTheDocument()
 
-    // Content container
-    expect(screen.getByTestId('mock-inputs-form-content').parentElement).toHaveClass('p-4')
+    // Content container (no conversation: no toolbar row, form is first block)
+    expect(screen.getByTestId('mock-inputs-form-content').parentElement).toHaveClass('p-4', 'rounded-t-2xl')
 
     // Start chat button container
     expect(screen.getByTestId('inputs-form-start-chat-button').parentElement).toHaveClass('p-4')
 
     // Collapsed state mobile styles
     rerender(<InputsFormNode collapsed={true} setCollapsed={setCollapsed} />)
-    expect(screen.getByText(/chat.chatSettingsTitle/i).parentElement).toHaveClass('px-4 py-3')
+    expect(screen.getByTestId('inputs-form-toolbar')).toHaveClass('px-4 py-2')
   })
 })

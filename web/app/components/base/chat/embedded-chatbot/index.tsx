@@ -2,14 +2,12 @@
 import type { AppData } from '@/models/share'
 import {
   useEffect,
+  useMemo,
 } from 'react'
-import { useTranslation } from 'react-i18next'
 import ChatWrapper from '@/app/components/base/chat/embedded-chatbot/chat-wrapper'
 import Header from '@/app/components/base/chat/embedded-chatbot/header'
 import Loading from '@/app/components/base/loading'
-import DifyLogo from '@/app/components/base/logo/dify-logo'
 import LogoHeader from '@/app/components/base/logo/logo-embedded-chat-header'
-import { useGlobalPublicStore } from '@/context/global-public-context'
 import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 import useDocumentTitle from '@/hooks/use-document-title'
 import { AppSourceType } from '@/service/share'
@@ -33,8 +31,6 @@ const Chatbot = () => {
     handleNewConversation,
     themeBuilder,
   } = useEmbeddedChatbotContext()
-  const { t } = useTranslation()
-  const systemFeatures = useGlobalPublicStore(s => s.systemFeatures)
 
   const customConfig = appData?.custom_config
   const site = appData?.site
@@ -47,14 +43,22 @@ const Chatbot = () => {
 
   useDocumentTitle(site?.title || 'Chat')
 
+  const headerShellStyle = useMemo(
+    () => Object.assign(
+      {},
+      CssTransform(themeBuilder?.theme?.backgroundHeaderColorStyle ?? ''),
+    ),
+    [themeBuilder?.theme?.backgroundHeaderColorStyle],
+  )
+
   return (
-    <div className="relative">
+    <div className="relative flex h-[100dvh] min-h-0 flex-col">
       <div
         className={cn(
-          'flex flex-col rounded-2xl',
-          isMobile ? 'h-[calc(100vh_-_60px)] shadow-xs' : 'h-[100vh] bg-chatbot-bg',
+          'flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl',
+          isMobile && 'shadow-xs',
         )}
-        style={isMobile ? Object.assign({}, CssTransform(themeBuilder?.theme?.backgroundHeaderColorStyle ?? '')) : {}}
+        style={headerShellStyle}
       >
         <Header
           isMobile={isMobile}
@@ -64,7 +68,12 @@ const Chatbot = () => {
           theme={themeBuilder?.theme}
           onCreateNewChat={handleNewConversation}
         />
-        <div className={cn('flex grow flex-col overflow-y-auto', isMobile && 'm-[0.5px] !h-[calc(100vh_-_3rem)] rounded-2xl bg-chatbot-bg')}>
+        <div
+          className={cn(
+            'flex min-h-0 flex-1 flex-col overflow-y-auto bg-chatbot-bg',
+            isMobile ? 'm-[0.5px] rounded-2xl' : 'rounded-b-2xl',
+          )}
+        >
           {appChatListDataLoading && (
             <Loading type="app" />
           )}
@@ -73,26 +82,14 @@ const Chatbot = () => {
           )}
         </div>
       </div>
-      {/* powered by */}
-      {isMobile && (
-        <div className="flex h-[60px] shrink-0 items-center pl-2">
-          {!appData?.custom_config?.remove_webapp_brand && (
-            <div className={cn(
-              'flex shrink-0 items-center gap-1.5 px-2',
-            )}
-            >
-              <div className="system-2xs-medium-uppercase text-text-tertiary">{t('chat.poweredBy', { ns: 'share' })}</div>
-              {
-                systemFeatures.branding.enabled && systemFeatures.branding.workspace_logo
-                  ? <img src={systemFeatures.branding.workspace_logo} alt="logo" className="block h-5 w-auto" />
-                  : appData?.custom_config?.replace_webapp_logo
-                    ? <img src={`${appData?.custom_config?.replace_webapp_logo}`} alt="logo" className="block h-5 w-auto" />
-                    : <DifyLogo size="small" />
-              }
-            </div>
-          )}
-        </div>
-      )}
+      <div
+        className="flex h-[60px] shrink-0 items-center justify-center rounded-2xl"
+        style={headerShellStyle}
+      >
+        {isDify() && (
+          <LogoHeader className="!h-10 w-auto" />
+        )}
+      </div>
     </div>
   )
 }
@@ -137,6 +134,7 @@ const EmbeddedChatbotWrapper = () => {
   } = useEmbeddedChatbot(AppSourceType.webApp)
 
   return (
+    // eslint-disable-next-line react/no-context-provider -- use-context-selector requires Provider
     <EmbeddedChatbotContext.Provider value={{
       appSourceType: AppSourceType.webApp,
       appData: (appData as AppData) || null,

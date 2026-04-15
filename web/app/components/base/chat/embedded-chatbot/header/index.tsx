@@ -1,20 +1,20 @@
 import type { FC } from 'react'
 import type { Theme } from '../theme/theme-context'
 import * as React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ActionButton from '@/app/components/base/action-button'
 import ViewFormDropdown from '@/app/components/base/chat/embedded-chatbot/inputs-form/view-form-dropdown'
-import Divider from '@/app/components/base/divider'
-import DifyLogo from '@/app/components/base/logo/dify-logo'
 import Tooltip from '@/app/components/base/tooltip'
-import { useGlobalPublicStore } from '@/context/global-public-context'
 import { cn } from '@/utils/classnames'
 import { isClient } from '@/utils/client'
 import {
   useEmbeddedChatbotContext,
 } from '../context'
 import { CssTransform } from '../theme/utils'
+
+/** Shown in embedded chatbot header (mobile + desktop). */
+const EMBEDDED_CHAT_HEADER_LABEL = 'Contact Rapide - Assistant virtuel'
 
 export type IHeaderProps = {
   isMobile?: boolean
@@ -28,13 +28,12 @@ const Header: FC<IHeaderProps> = ({
   isMobile,
   allowResetChat,
   customerIcon,
-  title,
+  title: _siteTitleHidden,
   theme,
   onCreateNewChat,
 }) => {
   const { t } = useTranslation()
   const {
-    appData,
     currentConversationId,
     inputsForms,
     allInputsHidden,
@@ -44,7 +43,6 @@ const Header: FC<IHeaderProps> = ({
   const [parentOrigin, setParentOrigin] = useState('')
   const [showToggleExpandButton, setShowToggleExpandButton] = useState(false)
   const [expanded, setExpanded] = useState(false)
-  const systemFeatures = useGlobalPublicStore(s => s.systemFeatures)
 
   const handleMessageReceived = useCallback((event: MessageEvent) => {
     let currentParentOrigin = parentOrigin
@@ -81,33 +79,31 @@ const Header: FC<IHeaderProps> = ({
     }, parentOrigin)
   }, [isIframe, parentOrigin, showToggleExpandButton, expanded])
 
+  const headerBarStyle = useMemo(
+    () => Object.assign(
+      {},
+      CssTransform(theme?.backgroundHeaderColorStyle ?? ''),
+      CssTransform(theme?.headerBorderBottomStyle ?? ''),
+    ),
+    [theme?.backgroundHeaderColorStyle, theme?.headerBorderBottomStyle],
+  )
+
   if (!isMobile) {
     return (
-      <div className="flex h-14 shrink-0 items-center justify-end p-3">
-        <div className="flex items-center gap-1">
-          {/* powered by */}
-          <div className="shrink-0">
-            {!appData?.custom_config?.remove_webapp_brand && (
-              <div
-                className={cn(
-                  'flex shrink-0 items-center gap-1.5 px-2',
-                )}
-                data-testid="webapp-brand"
-              >
-                <div className="text-text-tertiary system-2xs-medium-uppercase">{t('chat.poweredBy', { ns: 'share' })}</div>
-                {
-                  systemFeatures.branding.enabled && systemFeatures.branding.workspace_logo
-                    ? <img src={systemFeatures.branding.workspace_logo} alt="logo" className="block h-5 w-auto" />
-                    : appData?.custom_config?.replace_webapp_logo
-                      ? <img src={`${appData?.custom_config?.replace_webapp_logo}`} alt="logo" className="block h-5 w-auto" />
-                      : <DifyLogo size="small" />
-                }
-              </div>
-            )}
+      <div
+        className={cn('flex h-14 shrink-0 items-center justify-between rounded-t-2xl px-3')}
+        style={headerBarStyle}
+      >
+        <div className="flex min-w-0 grow items-center gap-3">
+          {customerIcon}
+          <div
+            className="truncate system-md-semibold"
+            style={CssTransform(theme?.colorFontOnHeaderStyle ?? '')}
+          >
+            {EMBEDDED_CHAT_HEADER_LABEL}
           </div>
-          {currentConversationId && (
-            <Divider type="vertical" className="h-3.5" />
-          )}
+        </div>
+        <div className="flex shrink-0 items-center gap-1">
           {
             showToggleExpandButton && (
               <Tooltip
@@ -116,8 +112,8 @@ const Header: FC<IHeaderProps> = ({
                 <ActionButton size="l" onClick={handleToggleExpand} data-testid="expand-button">
                   {
                     expanded
-                      ? <div className="i-ri-collapse-diagonal-2-line h-[18px] w-[18px]" />
-                      : <div className="i-ri-expand-diagonal-2-line h-[18px] w-[18px]" />
+                      ? <div className={cn('i-ri-collapse-diagonal-2-line h-[18px] w-[18px]', theme?.colorPathOnHeader)} />
+                      : <div className={cn('i-ri-expand-diagonal-2-line h-[18px] w-[18px]', theme?.colorPathOnHeader)} />
                   }
                 </ActionButton>
               </Tooltip>
@@ -128,12 +124,12 @@ const Header: FC<IHeaderProps> = ({
               popupContent={t('chat.resetChat', { ns: 'share' })}
             >
               <ActionButton size="l" onClick={onCreateNewChat} data-testid="reset-chat-button">
-                <div className="i-ri-reset-left-line h-[18px] w-[18px]" />
+                <div className={cn('i-ri-reset-left-line h-[18px] w-[18px]', theme?.colorPathOnHeader)} />
               </ActionButton>
             </Tooltip>
           )}
           {currentConversationId && inputsForms.length > 0 && !allInputsHidden && (
-            <ViewFormDropdown />
+            <ViewFormDropdown iconColor={theme?.colorPathOnHeader} />
           )}
         </div>
       </div>
@@ -143,15 +139,15 @@ const Header: FC<IHeaderProps> = ({
   return (
     <div
       className={cn('flex h-14 shrink-0 items-center justify-between rounded-t-2xl px-3')}
-      style={CssTransform(theme?.headerBorderBottomStyle ?? '')}
+      style={headerBarStyle}
     >
-      <div className="flex grow items-center space-x-3">
+      <div className="flex min-w-0 grow items-center gap-3">
         {customerIcon}
         <div
           className="truncate system-md-semibold"
           style={CssTransform(theme?.colorFontOnHeaderStyle ?? '')}
         >
-          {title}
+          {EMBEDDED_CHAT_HEADER_LABEL}
         </div>
       </div>
       <div className="flex items-center gap-1">

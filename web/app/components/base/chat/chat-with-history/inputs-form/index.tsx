@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import Button from '@/app/components/base/button'
 import InputsFormContent from '@/app/components/base/chat/chat-with-history/inputs-form/content'
 import Divider from '@/app/components/base/divider'
-import { Message3Fill } from '@/app/components/base/icons/src/public/other'
 import { cn } from '@/utils/classnames'
 import { useChatWithHistoryContext } from '../context'
 
@@ -29,6 +28,8 @@ const InputsFormNode = ({
   if (allInputsHidden || inputsForms.length === 0)
     return null
 
+  const showToolbar = collapsed || Boolean(!collapsed && currentConversationId)
+
   return (
     <div className={cn('flex flex-col items-center px-4 pt-6', isMobile && 'pt-4')}>
       <div className={cn(
@@ -36,23 +37,24 @@ const InputsFormNode = ({
         collapsed && 'border border-components-card-border bg-components-card-bg shadow-none',
       )}
       >
-        <div className={cn(
-          'flex items-center gap-3 rounded-t-2xl px-6 py-4',
-          !collapsed && 'border-b border-divider-subtle',
-          isMobile && 'px-4 py-3',
+        {showToolbar && (
+          <div
+            data-testid="inputs-form-toolbar"
+            className={cn(
+              'flex justify-end rounded-t-2xl border-b border-divider-subtle px-6 py-2',
+              isMobile && 'px-4',
+            )}
+          >
+            {collapsed && (
+              <Button className="uppercase text-text-tertiary" size="small" variant="ghost" onClick={() => setCollapsed(false)}>{t('operation.edit', { ns: 'common' })}</Button>
+            )}
+            {!collapsed && currentConversationId && (
+              <Button className="uppercase text-text-tertiary" size="small" variant="ghost" onClick={() => setCollapsed(true)}>{t('operation.close', { ns: 'common' })}</Button>
+            )}
+          </div>
         )}
-        >
-          <Message3Fill className="h-6 w-6 shrink-0" />
-          <div className="system-xl-semibold grow text-text-secondary">{t('chat.chatSettingsTitle', { ns: 'share' })}</div>
-          {collapsed && (
-            <Button className="uppercase text-text-tertiary" size="small" variant="ghost" onClick={() => setCollapsed(false)}>{t('operation.edit', { ns: 'common' })}</Button>
-          )}
-          {!collapsed && currentConversationId && (
-            <Button className="uppercase text-text-tertiary" size="small" variant="ghost" onClick={() => setCollapsed(true)}>{t('operation.close', { ns: 'common' })}</Button>
-          )}
-        </div>
         {!collapsed && (
-          <div className={cn('p-6', isMobile && 'p-4')}>
+          <div className={cn('p-6', isMobile && 'p-4', !showToolbar && 'rounded-t-2xl')}>
             <InputsFormContent />
           </div>
         )}

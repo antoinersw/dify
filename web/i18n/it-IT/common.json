@@ -112,6 +112,7 @@
   "chat.conversationNamePlaceholder": "Per favore inserisci il nome della conversazione",
   "chat.inputDisabledPlaceholder": "Solo anteprima",
   "chat.inputPlaceholder": "Parla con il {{botName}}",
+  "chat.inputPlaceholderPlain": "Scrivi un messaggio",
   "chat.renameConversation": "Rinomina Conversazione",
   "chat.resend": "Reinvia",
   "chat.thinking": "Pensante...",

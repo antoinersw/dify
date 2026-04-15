@@ -112,6 +112,7 @@
   "chat.conversationNamePlaceholder": "Konuşma adını girin",
   "chat.inputDisabledPlaceholder": "Yalnızca Önizleme",
   "chat.inputPlaceholder": "{{botName}} ile konuş",
+  "chat.inputPlaceholderPlain": "Mesaj yazın",
   "chat.renameConversation": "Konuşmayı Yeniden Adlandır",
   "chat.resend": "Yeniden gönder",
   "chat.thinking": "Düşünüyor...",

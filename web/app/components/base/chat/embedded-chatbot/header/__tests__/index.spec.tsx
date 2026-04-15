@@ -1,10 +1,7 @@
 import type { EmbeddedChatbotContextValue } from '../../context'
 import type { AppData } from '@/models/share'
-import type { SystemFeatures } from '@/types/feature'
 import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { useGlobalPublicStore } from '@/context/global-public-context'
-import { InstallationScope, LicenseStatus } from '@/types/feature'
 import { useEmbeddedChatbotContext } from '../../context'
 import Header from '../index'
 
@@ -12,18 +9,11 @@ vi.mock('../../context', () => ({
   useEmbeddedChatbotContext: vi.fn(),
 }))
 
-vi.mock('@/context/global-public-context', () => ({
-  useGlobalPublicStore: vi.fn(),
-}))
+const EMBEDDED_HEADER_LABEL = 'Contact Rapide - Assistant virtuel'
 
 vi.mock('@/app/components/base/chat/embedded-chatbot/inputs-form/view-form-dropdown', () => ({
   default: () => <div data-testid="view-form-dropdown" />,
 }))
-
-type GlobalPublicStoreMock = {
-  systemFeatures: SystemFeatures
-  setSystemFeatures: (systemFeatures: SystemFeatures) => void
-}
 
 describe('EmbeddedChatbot Header', () => {
   const defaultAppData: AppData = {
@@ -47,46 +37,6 @@ describe('EmbeddedChatbot Header', () => {
     allInputsHidden: false,
   }
 
-  const defaultSystemFeatures: SystemFeatures = {
-    trial_models: [],
-    plugin_installation_permission: {
-      plugin_installation_scope: InstallationScope.ALL,
-      restrict_to_marketplace_only: false,
-    },
-    sso_enforced_for_signin: false,
-    sso_enforced_for_signin_protocol: '',
-    sso_enforced_for_web: false,
-    sso_enforced_for_web_protocol: '',
-    enable_marketplace: false,
-    enable_change_email: false,
-    enable_email_code_login: false,
-    enable_email_password_login: false,
-    enable_social_oauth_login: false,
-    is_allow_create_workspace: false,
-    is_allow_register: false,
-    is_email_setup: false,
-    license: {
-      status: LicenseStatus.NONE,
-      expired_at: '',
-    },
-    branding: {
-      enabled: true,
-      workspace_logo: '',
-      login_page_logo: '',
-      favicon: '',
-      application_title: '',
-    },
-    webapp_auth: {
-      enabled: false,
-      allow_sso: false,
-      sso_config: { protocol: '' },
-      allow_email_code_login: false,
-      allow_email_password_login: false,
-    },
-    enable_trial_app: false,
-    enable_explore_banner: false,
-  }
-
   const setupIframe = () => {
     const mockPostMessage = vi.fn()
     const mockTop = { postMessage: mockPostMessage }
@@ -99,10 +49,6 @@ describe('EmbeddedChatbot Header', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.mocked(useEmbeddedChatbotContext).mockReturnValue(defaultContext as EmbeddedChatbotContextValue)
-    vi.mocked(useGlobalPublicStore).mockImplementation((selector: (s: GlobalPublicStoreMock) => unknown) => selector({
-      systemFeatures: defaultSystemFeatures,
-      setSystemFeatures: vi.fn(),
-    }))
 
     Object.defineProperty(window, 'self', { value: window, configurable: true })
     Object.defineProperty(window, 'top', { value: window, configurable: true })
@@ -121,109 +67,10 @@ describe('EmbeddedChatbot Header', () => {
   }
 
   describe('Desktop Rendering', () => {
-    it('should render desktop header with branding by default', async () => {
+    it('should render the same fixed header label as mobile', () => {
       render(<Header title="Test Chatbot" />)
 
-      expect(screen.getByTestId('webapp-brand')).toBeInTheDocument()
-      expect(screen.getByText('share.chat.poweredBy')).toBeInTheDocument()
-    })
-
-    it('should render custom logo when provided in appData', () => {
-      vi.mocked(useEmbeddedChatbotContext).mockReturnValue({
-        ...defaultContext,
-        appData: {
-          ...defaultAppData,
-          custom_config: {
-            ...defaultAppData.custom_config,
-            replace_webapp_logo: 'https://example.com/logo.png',
-          },
-        },
-      } as EmbeddedChatbotContextValue)
-
-      render(<Header title="Test Chatbot" />)
-
-      const img = screen.getByAltText('logo')
-      expect(img).toHaveAttribute('src', 'https://example.com/logo.png')
-    })
-
-    it('should render workspace logo when branding is enabled and logo exists', () => {
-      vi.mocked(useGlobalPublicStore).mockImplementation((selector: (s: GlobalPublicStoreMock) => unknown) => selector({
-        systemFeatures: {
-          ...defaultSystemFeatures,
-          branding: {
-            ...defaultSystemFeatures.branding,
-            workspace_logo: 'https://example.com/workspace.png',
-          },
-        },
-        setSystemFeatures: vi.fn(),
-      }))
-
-      render(<Header title="Test Chatbot" />)
-
-      const img = screen.getByAltText('logo')
-      expect(img).toHaveAttribute('src', 'https://example.com/workspace.png')
-    })
-
-    it('should render Dify logo by default when branding enabled is true but no logo provided', () => {
-      vi.mocked(useGlobalPublicStore).mockImplementation((selector: (s: GlobalPublicStoreMock) => unknown) => selector({
-        systemFeatures: {
-          ...defaultSystemFeatures,
-          branding: {
-            ...defaultSystemFeatures.branding,
-            enabled: true,
-            workspace_logo: '',
-          },
-        },
-        setSystemFeatures: vi.fn(),
-      }))
-      render(<Header title="Test Chatbot" />)
-      expect(screen.getByAltText('Dify logo')).toBeInTheDocument()
-    })
-
-    it('should render Dify logo when branding is disabled', () => {
-      vi.mocked(useGlobalPublicStore).mockImplementation((selector: (s: GlobalPublicStoreMock) => unknown) => selector({
-        systemFeatures: {
-          ...defaultSystemFeatures,
-          branding: {
-            ...defaultSystemFeatures.branding,
-            enabled: false,
-          },
-        },
-        setSystemFeatures: vi.fn(),
-      }))
-      render(<Header title="Test Chatbot" />)
-      expect(screen.getByAltText('Dify logo')).toBeInTheDocument()
-    })
-
-    it('should NOT render branding when remove_webapp_brand is true', () => {
-      vi.mocked(useEmbeddedChatbotContext).mockReturnValue({
-        ...defaultContext,
-        appData: {
-          ...defaultAppData,
-          custom_config: {
-            ...defaultAppData.custom_config,
-            remove_webapp_brand: true,
-          },
-        },
-      } as EmbeddedChatbotContextValue)
-
-      render(<Header title="Test Chatbot" />)
-
-      expect(screen.queryByTestId('webapp-brand')).not.toBeInTheDocument()
-    })
-
-    it('should render divider only when currentConversationId is present', () => {
-      vi.mocked(useEmbeddedChatbotContext).mockReturnValue({ ...defaultContext } as EmbeddedChatbotContextValue)
-      const { unmount } = render(<Header title="Test Chatbot" />)
-      expect(screen.getByTestId('divider')).toBeInTheDocument()
-      unmount()
-
-      vi.mocked(useEmbeddedChatbotContext).mockReturnValue({
-        ...defaultContext,
-        currentConversationId: '',
-      } as EmbeddedChatbotContextValue)
-      render(<Header title="Test Chatbot" />)
-      expect(screen.queryByTestId('divider')).not.toBeInTheDocument()
+      expect(screen.getByText(EMBEDDED_HEADER_LABEL)).toBeInTheDocument()
     })
 
     it('should render reset button when allowResetChat is true and conversation exists', () => {
@@ -279,10 +126,10 @@ describe('EmbeddedChatbot Header', () => {
   })
 
   describe('Mobile Rendering', () => {
-    it('should render mobile header with title', () => {
+    it('should render mobile header with fixed label', () => {
       render(<Header title="Mobile Chatbot" isMobile />)
 
-      expect(screen.getByText('Mobile Chatbot')).toBeInTheDocument()
+      expect(screen.getByText(EMBEDDED_HEADER_LABEL)).toBeInTheDocument()
     })
 
     it('should render customer icon in mobile header', () => {
