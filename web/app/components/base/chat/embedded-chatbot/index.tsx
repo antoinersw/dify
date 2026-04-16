@@ -82,14 +82,14 @@ const Chatbot = () => {
           )}
         </div>
       </div>
-      <div
+      {/* <div
         className="flex h-[60px] shrink-0 items-center justify-center rounded-2xl"
         style={headerShellStyle}
       >
         {isDify() && (
           <LogoHeader className="!h-10 w-auto" />
         )}
-      </div>
+      </div> */}
     </div>
   )
 }
