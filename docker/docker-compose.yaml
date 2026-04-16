@@ -1080,23 +1080,24 @@ services:
   # Certbot service
   # use `docker-compose --profile certbot up` to start the certbot service.
 
-  certbot:
-    image: certbot/certbot
-    profiles:
-      - certbot
-    volumes:
-      - ./volumes/certbot/conf:/etc/letsencrypt
-      - ./volumes/certbot/www:/var/www/html
-    entrypoint: /bin/sh
-    command: >
-      -c "certbot certonly --webroot
-      --webroot-path=/var/www/html
-      -d ${CERTBOT_DOMAIN}
-      --email ${CERTBOT_EMAIL}
-      --agree-tos
-      --no-eff-email"
-    # The nginx reverse proxy.
-    # used for reverse proxying the API service and Web service.
+  # certbot:
+  #   image: certbot/certbot
+  #   profiles:
+  #     - certbot
+  #   volumes:
+  #     - ./volumes/certbot/conf:/etc/letsencrypt
+  #     - ./volumes/certbot/www:/var/www/html
+  #   entrypoint: /bin/sh
+  #   command: >
+  #     -c "certbot certonly --webroot
+  #     --webroot-path=/var/www/html
+  #     -d ${CERTBOT_DOMAIN}
+  #     --email ${CERTBOT_EMAIL}
+  #     --agree-tos
+  #     --no-eff-email"
+  #   # The nginx reverse proxy.
+  #   # used for reverse proxying the API service and Web service.
+  
   nginx:
     image: nginx:latest
     restart: always
@@ -1108,9 +1109,9 @@ services:
       - ./nginx/docker-entrypoint.sh:/docker-entrypoint-mount.sh
 
       # Certbot ONLY (clean way)
-      - ./volumes/certbot/conf:/etc/letsencrypt
-      - ./volumes/certbot/www:/var/www/html
-
+    # AJOUT CLOUDFARE ORIGIN CERT
+      - ./ssl/cloudflare/origin.pem:/etc/ssl/cf/origin.pem
+      - ./ssl/cloudflare/origin.key:/etc/ssl/cf/origin.key
     entrypoint:
       [
         "sh",
@@ -1145,6 +1146,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+    
     # The Weaviate vector store.
   weaviate:
     image: semitechnologies/weaviate:1.27.0
