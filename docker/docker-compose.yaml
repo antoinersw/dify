@@ -1107,11 +1107,8 @@ services:
       - ./nginx/https.conf.template:/etc/nginx/https.conf.template
       - ./nginx/conf.d:/etc/nginx/conf.d
       - ./nginx/docker-entrypoint.sh:/docker-entrypoint-mount.sh
-
-      # Certbot ONLY (clean way)
-    # AJOUT CLOUDFARE ORIGIN CERT
-      - ./ssl/cloudflare/origin.pem:/etc/ssl/cf/origin.pem
-      - ./ssl/cloudflare/origin.key:/etc/ssl/cf/origin.key
+      - ./ssl/cloudflare/origin.pem:/etc/ssl/origin.pem
+      - ./ssl/cloudflare/origin.key:/etc/ssl/origin.key
     entrypoint:
       [
         "sh",
@@ -1148,6 +1145,7 @@ services:
       - "443:443"
     
     # The Weaviate vector store.
+  
   weaviate:
     image: semitechnologies/weaviate:1.27.0
     profiles:
