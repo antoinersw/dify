@@ -9,7 +9,7 @@ vi.mock('../../context', () => ({
   useEmbeddedChatbotContext: vi.fn(),
 }))
 
-const EMBEDDED_HEADER_LABEL = 'Contact Rapide - Assistant virtuel'
+const EMBEDDED_HEADER_LABEL = 'Prise de rendez-vous - Contact Rapide'
 
 vi.mock('@/app/components/base/chat/embedded-chatbot/inputs-form/view-form-dropdown', () => ({
   default: () => <div data-testid="view-form-dropdown" />,

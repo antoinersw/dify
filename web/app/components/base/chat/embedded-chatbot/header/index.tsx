@@ -14,7 +14,7 @@ import {
 import { CssTransform } from '../theme/utils'
 
 /** Shown in embedded chatbot header (mobile + desktop). */
-const EMBEDDED_CHAT_HEADER_LABEL = 'Contact Rapide - Assistant virtuel'
+const EMBEDDED_CHAT_HEADER_LABEL = 'Prise de rendez-vous - Contact Rapide'
 
 export type IHeaderProps = {
   isMobile?: boolean
