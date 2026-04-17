@@ -180,8 +180,8 @@ const Answer: FC<AnswerProps> = ({
                   <WorkflowProcessItem
                     data={workflowProcess}
                     item={item}
-                    hideProcessDetail={hideProcessDetail}
-                    // hideProcessDetail={true}
+                    // hideProcessDetail={hideProcessDetail}
+                    hideProcessDetail={true}
                     readonly={hideProcessDetail && appData ? !appData.site.show_workflow_steps : undefined}
                   />
                 )
