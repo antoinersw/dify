@@ -255,7 +255,7 @@ const GenerationItem: FC<IGenerationItemProps> = ({
                       <WorkflowProcessItem
                         data={workflowProcessData}
                         expand={workflowProcessData.expand}
-                        hideProcessDetail={hideProcessDetail}
+                        hideProcessDetail={true}
                         hideInfo={hideProcessDetail}
                         readonly={!siteInfo.show_workflow_steps}
                       />
