@@ -23,7 +23,6 @@ import { useStore as useAppStore } from '@/app/components/app/store'
 import ActionButton, { ActionButtonState } from '@/app/components/base/action-button'
 import HumanInputFilledFormList from '@/app/components/base/chat/chat/answer/human-input-filled-form-list'
 import HumanInputFormList from '@/app/components/base/chat/chat/answer/human-input-form-list'
-import WorkflowProcessItem from '@/app/components/base/chat/chat/answer/workflow-process'
 import { useChatContext } from '@/app/components/base/chat/chat/context'
 import Loading from '@/app/components/base/loading'
 import { Markdown } from '@/app/components/base/markdown'
@@ -96,7 +95,7 @@ const GenerationItem: FC<IGenerationItemProps> = ({
   controlClearMoreLikeThis,
   supportFeedback,
   isShowTextToSpeech,
-  hideProcessDetail,
+  // hideProcessDetail,
   siteInfo,
   inSidePanel,
 }) => {
@@ -251,7 +250,7 @@ const GenerationItem: FC<IGenerationItemProps> = ({
                         <span>{taskId}</span>
                       </div>
                     )}
-                    {siteInfo && workflowProcessData && (
+                    {/* {siteInfo && workflowProcessData && (
                       <WorkflowProcessItem
                         data={workflowProcessData}
                         expand={workflowProcessData.expand}
@@ -259,7 +258,7 @@ const GenerationItem: FC<IGenerationItemProps> = ({
                         hideInfo={hideProcessDetail}
                         readonly={!siteInfo.show_workflow_steps}
                       />
-                    )}
+                    )} */}
                     {showResultTabs && (
                       <div className="flex items-center space-x-6 px-1">
                         <div

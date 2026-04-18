@@ -24,7 +24,6 @@ import HumanInputFormList from './human-input-form-list'
 import More from './more'
 import Operation from './operation'
 import SuggestedQuestions from './suggested-questions'
-import WorkflowProcessItem from './workflow-process'
 
 type AnswerProps = {
   item: ChatItem
@@ -51,8 +50,8 @@ const Answer: FC<AnswerProps> = ({
   responding,
   showPromptLog,
   chatAnswerContainerInner,
-  hideProcessDetail,
-  appData,
+  // hideProcessDetail,
+  // appData,
   noChatInput,
   switchSibling,
   hideAvatar,
@@ -175,7 +174,7 @@ const Answer: FC<AnswerProps> = ({
                 )
               }
               {/** Render workflow process */}
-              {
+              {/* {
                 workflowProcess && (
                   <WorkflowProcessItem
                     data={workflowProcess}
@@ -185,7 +184,7 @@ const Answer: FC<AnswerProps> = ({
                     readonly={hideProcessDetail && appData ? !appData.site.show_workflow_steps : undefined}
                   />
                 )
-              }
+              } */}
               {
                 humanInputFormDataList && humanInputFormDataList.length > 0 && (
                   <HumanInputFormList
@@ -340,17 +339,17 @@ const Answer: FC<AnswerProps> = ({
                 )
               }
               {/** Render workflow process */}
-              {
+              {/* {
                 workflowProcess && (
                   <WorkflowProcessItem
                     data={workflowProcess}
                     item={item}
-                    hideProcessDetail={hideProcessDetail}
+                    hideProcessDetail={true}
                     // hideProcessDetail={hideProcessDetail}
                     readonly={hideProcessDetail && appData ? !appData.site?.show_workflow_steps : undefined}
                   />
                 )
-              }
+              } */}
               {
                 responding && contentIsEmpty && !hasAgentThoughts && (
                   <div className="flex h-5 w-6 items-center justify-center">
